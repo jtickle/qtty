@@ -860,6 +860,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "pty-process"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8749b545e244c90bf74a5767764cc2194f1888bb42f84015486a64c82bea5cc0"
+dependencies = [
+ "libc",
+ "rustix",
+ "tokio",
+]
+
+[[package]]
 name = "pwd-grp"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -876,8 +887,10 @@ name = "qtty"
 version = "0.1.0"
 dependencies = [
  "pam-client",
+ "pty-process",
  "pwd-grp",
  "s2n-quic",
+ "termios",
  "tokio",
 ]
 
@@ -1060,6 +1073,7 @@ checksum = "72e572a5e8ca657d7366229cdde4bd14c4eb5499a9573d4d366fe1b599daa316"
 dependencies = [
  "bitflags 2.4.1",
  "errno",
+ "itoa",
  "libc",
  "linux-raw-sys",
  "windows-sys 0.52.0",
@@ -1438,6 +1452,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "termios"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "411c5bf740737c7918b8b1fe232dca4dc9f8e754b8ad5e20966814001ed0ac6b"
+dependencies = [
+ "libc",
 ]
 
 [[package]]
