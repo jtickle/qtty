@@ -1,0 +1,3 @@
+cert_pem = "crt.pem"
+key_pem = "key.pem"
+listen = "127.0.0.1:2222"

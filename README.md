@@ -45,3 +45,10 @@ ChatGPT recomments using `forkpty` which it sounds like is a higher level abstra
 
 Of course if anyone is ever going to use this, it has to not be Linux-specific. Support for the major BSD's
 including Mac OS as well as ... however the hell you'd do this for Windows ... is essential.
+
+TODO
+====
+
+Handle SIGWINCH on client and send info to server (maybe a separate bidirectional channel for this??)
+
+Terminate gracefully

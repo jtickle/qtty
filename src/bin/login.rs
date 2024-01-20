@@ -31,7 +31,7 @@ fn main() {
     println!("Trying to get session for uid {}", uid);
 
     // Open session and initialize credentials
-    let mut session = context.open_session(Flag::NONE).expect("Session opening failed");
+    let session = context.open_session(Flag::NONE).expect("Session opening failed");
 
     // Run a process in the PAM environment
     let result = Command::new("/usr/bin/id")
