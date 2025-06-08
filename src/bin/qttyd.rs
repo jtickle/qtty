@@ -73,9 +73,11 @@ async fn handle_connection(mut connection: Connection) {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    println!("1");
 
     // Parse arguments
     let args = Args::parse();
+    println!("2");
 
     // Get the dirname of the cfg file for relative pathing later
     // Current directory if no parent
@@ -83,11 +85,14 @@ async fn main() -> Result<(), Box<dyn Error>> {
         Some(path) => path,
         None => Path::new(".")
     };
+    println!("3");
 
     // Load the entire configuration file and parse it
     let cfg: Config = toml::from_str(&read_to_string(&args.config).await?)?;
+    println!("4");
 
     env_logger::init();
+    info!("qtty 0.0.1");
 
     // Build a socket
     let io = IoBuilder::default()
@@ -99,6 +104,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .with_tls((relpath.join(cfg.cert_pem).as_path(), relpath.join(cfg.key_pem).as_path()))?
         .with_io(io)?
         .start()?;
+
+    info!("Listening");
 
     // Accept connections
     while let Some(connection) = server.accept().await {

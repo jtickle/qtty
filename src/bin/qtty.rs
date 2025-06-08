@@ -3,6 +3,9 @@ use clap::Parser;
 use s2n_quic::{Client, provider::io::tokio::Builder as IoBuilder, client::Connect};
 use termios::{Termios, tcsetattr};
 use tokio::io::{stdout, copy, stdin};
+use tokio::signal;
+use tokio_util::sync::CancellationToken;
+use tokio_util::task::TaskTracker;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -29,6 +32,36 @@ fn reset_term_attrs(fd: i32) {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+
+    // Track all created tasks
+    let tracker = TaskTracker::new();
+
+    // This will let us communicate cancellation
+    let cancel_token = CancellationToken::new();
+
+    // Handle signals
+    let c_c_cancel_token = cancel_token.clone();
+    tracker.spawn(async move {
+        tokio::select! {
+            _ = signal::ctrl_c() => {
+                println!("Terminating due to Ctrl+C");
+                c_c_cancel_token.cancel();
+            }
+            _ = c_c_cancel_token.cancelled() => {
+                println!("Task was cancelled through other means");
+            }
+        }
+    });
+
+    // Handle signals
+    match signal::ctrl_c().await {
+        Ok(()) => {
+            println!("Ctrl+C Pressed");
+        },
+        Err(err) => {
+            eprintln!("Unable to listen for shutdown signal: {}", err);
+        }
+    }
 
     // Parse arguments
     let args = Args::parse();
