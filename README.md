@@ -1,7 +1,9 @@
 One struggle is that after building, you need to...
 
+```
 chmod 4755 target/debug/qtty
 chown root:root target/debug/qtty
+```
 
 This is 100% folly. Things you never, ever, ever, ever do:
 
@@ -14,12 +16,12 @@ things happen to your server.
 Resources:
 
 PAM:
-https://docs.rs/pam-client/latest/pam_client/
+* https://docs.rs/pam-client/latest/pam_client/
 
 PTY:
-https://superuser.com/questions/646491/what-is-the-difference-between-tty-and-vty-in-linux
-https://linux.die.net/man/4/pts
-http://www.linusakesson.net/programming/tty/
+* https://superuser.com/questions/646491/what-is-the-difference-between-tty-and-vty-in-linux
+* https://linux.die.net/man/4/pts
+* http://www.linusakesson.net/programming/tty/
 
 You have to open /dev/ptmx which gives you a file descriptor for a new PTY master, and creates
 a new PTY slave in /dev/pts. The path to the new slave can be found by passing the master
@@ -53,9 +55,11 @@ Don't!
 
 OK, if you insist, first you need the PAM development libraries
 
+```
 apt install libpam0g-dev
 
 cargo build
+```
 
 For your convenience, there is a cert and key in this repo, and a cfg file for qttyd.
 Obviously using this in production would be a horrible idea but doing it with that key
@@ -63,11 +67,15 @@ would just be criminally negligent.
 
 You'll want to enable logging on the server and specify the config file:
 
+```
 RUST_LOG=debug ./target/debug/qttyd --config cfg.toml
+```
 
 Then you can try to connectg with the client, but the client is broken sadly.
 
+```
 qtty -c crt.pem localhost
+```
 
 I swear I had it working at one point. It looks like I tried to add support for killing
 the connection and failed, and it don't work. Maybe I'll fix it someday. If you ctrl+c
@@ -79,3 +87,5 @@ TODO
 Handle SIGWINCH on client and send info to server (maybe a separate bidirectional channel for this??)
 
 Terminate gracefully
+
+Make it like secure n stuff
